@@ -2,15 +2,13 @@
 
 import React, { Component } from 'react';
 
-import { Link } from 'react-router-dom';
-
-import { FaGithubAlt, FaPlus, FaSpinner } from 'react-icons/fa';
-
 import api from '../../services/api';
 
 import Container from '../../components/Container';
-
-import { Form, SubmitButton, List } from './styles';
+import RepoForm from '../../components/RepoForm';
+import RepoList from '../../components/RepoList';
+import FormInput from '../../components/FormInput';
+import SubmitButton from '../../components/SubmitButton';
 
 export default class Main extends Component {
   state = {
@@ -80,38 +78,11 @@ export default class Main extends Component {
 
     return (
       <Container>
-        <h1>
-          <FaGithubAlt />
-          Repositórios
-        </h1>
-
-        <Form onSubmit={this.handleSubmit}>
-          <input
-            type="text"
-            placeholder="Adicionar repositório"
-            value={newRepo}
-            onChange={this.handleInputChange}
-          />
-
-          <SubmitButton loading={loading ? 1 : 0}>
-            {loading ? (
-              <FaSpinner color="#FFF" size={14} />
-            ) : (
-              <FaPlus color="#FFF" size={14} />
-            )}
-          </SubmitButton>
-        </Form>
-
-        <List>
-          {repositories.map((repository) => (
-            <li key={repository.name}>
-              <span>{repository.name}</span>
-              <Link to={`/repository/${encodeURIComponent(repository.name)}`}>
-                Detalhes
-              </Link>
-            </li>
-          ))}
-        </List>
+        <RepoForm handleSubmit={this.handleSubmit}>
+          <FormInput handleInput={this.handleInputChange} repoValue={newRepo} />
+          <SubmitButton loading={loading} />
+        </RepoForm>
+        <RepoList repositories={repositories} />
       </Container>
     );
   }

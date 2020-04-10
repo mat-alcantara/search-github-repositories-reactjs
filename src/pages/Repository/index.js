@@ -1,13 +1,13 @@
 // A page who contains the infos about a repository and its opened issues
 
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import api from '../../services/api';
 
 import Container from '../../components/Container';
-
-import { Loading, Owner, IssueList } from './styles';
+import Owner from '../../components/Owner';
+import IssueList from '../../components/IssueList';
+import Loading from '../../components/Loading';
 
 export default class Repository extends Component {
   state = {
@@ -46,34 +46,13 @@ export default class Repository extends Component {
     const { issues, repository, loading } = this.state;
 
     if (loading) {
-      return <Loading>Carregando</Loading>;
+      return <Loading />;
     }
 
     return (
       <Container>
-        <Owner>
-          <Link to="/">Voltar aos repositórios</Link>
-          <img src={repository.owner.avatar_url} alt={repository.owner.login} />
-          <h1>{repository.name}</h1>
-          <p>{repository.description}</p>
-        </Owner>
-
-        <IssueList>
-          {issues.map((issue) => (
-            <li key={String(issue.id)}>
-              <img src={issue.user.avatar_url} alt={issue.user.login} />
-              <div>
-                <strong>
-                  <a href={issue.html_url}>{issue.title}</a>
-                  {issue.labels.map((label) => (
-                    <span key={String(label.id)}>{label.name}</span>
-                  ))}
-                </strong>
-                <p>{issue.user.login}</p>
-              </div>
-            </li>
-          ))}
-        </IssueList>
+        <Owner repository={repository} />
+        <IssueList issues={issues} />
       </Container>
     );
   }
